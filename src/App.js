@@ -10,11 +10,13 @@ import {Image} from 'image-js';
 // import test from './testImages/mrzOnly.jpg';
 // import test from './testImages/download.jpg';
 // import test from './testImages/images.jpg';
+import test from './testImages/oneMore.png';
+
 // import test from './testImages/images1.jpg';
-import test from './testImages/nir.jpg';
+// import test from './testImages/nir.jpg';
 // import test from './testImages/testIM.png';
 // import test from './testImages/gallery-5c47db59cede8.jpg';
-//  import test from './testImages/lkhasgd.png';
+ // import test from './testImages/lkhasgd.png';
 
 
 // const scheduler = createScheduler();
@@ -24,8 +26,8 @@ function App() {
     const [ocr, setOcr] = useState('waiting for your click...');
     const [parsedData, setParsedData] = useState({});
     const worker = createWorker({
-        langPath: 'https://cdn.jsdelivr.net/gh/uwolfer/tesseract-mrz@master/lang,',
-        // gzip: false,
+        langPath: 'https://cdn.jsdelivr.net/gh/nirchetrit/mrzpassportdetectionandparsing@latest/src/lang-data',
+        gzip: false,
         // logger: m => console.log(m)
     });
     const mrzDetection = async () => {
@@ -60,9 +62,10 @@ function App() {
     const doOCR = async () => {
         setOcr('detecting...');
         await worker.load();
-        await worker.loadLanguage('OCRB');
-        await worker.initialize('OCRB');
-        const {data: {lines, text}} = await worker.recognize(document.getElementById('result'));
+        await worker.loadLanguage('mrz');
+        await worker.initialize('mrz');
+        //main-image // result
+        const {data: {lines, text}} = await worker.recognize(document.getElementById('main-image'));
         let mrz = [];
         lines.forEach(line => {
             mrz.push(line.text.replace(/ |\r\n|\r|\n/g, ""));
